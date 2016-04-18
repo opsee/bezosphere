@@ -1,2 +1,3 @@
 BEZOSPHERE_ADDRESS=:9104
 BEZOSPHERE_SPANX_ADDRESS=spanx.in.opsee.com:8443
+BEZOSPHERE_POSTGRES_CONN=postgres://postgres@postgres/bezosphere_test?sslmode=disable

@@ -7,7 +7,6 @@ Package service is a generated protocol buffer package.
 
 It is generated from these files:
 	bezos.proto
-	cats.proto
 	checker.proto
 	keelhaul.proto
 	spanx.proto
@@ -15,8 +14,6 @@ It is generated from these files:
 
 It has these top-level messages:
 	BezosRequest
-	ListChecksRequest
-	ListChecksResponse
 	CheckResourceResponse
 	ResourceResponse
 	CheckResourceRequest

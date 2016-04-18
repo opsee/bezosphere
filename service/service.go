@@ -7,11 +7,13 @@ import (
 	"github.com/aws/aws-sdk-go/aws/credentials"
 	aws_session "github.com/aws/aws-sdk-go/aws/session"
 	opsee "github.com/opsee/basic/service"
+	"github.com/opsee/bezosphere/store"
 	log "github.com/sirupsen/logrus"
 	"golang.org/x/net/context"
 	"google.golang.org/grpc"
 	grpcauth "google.golang.org/grpc/credentials"
 	"net"
+	"reflect"
 )
 
 var (
@@ -25,19 +27,24 @@ var (
 
 type service struct {
 	spanxClient opsee.SpanxClient
+	db          store.Store
 }
 
 type session struct {
 	session *aws_session.Session
 	log     *log.Entry
+	cached  bool
 }
 
 type Config struct {
 	SpanxAddress string
+	Db           store.Store
 }
 
 func New(config Config) (*service, error) {
-	svc := new(service)
+	svc := &service{
+		db: config.Db,
+	}
 
 	spanxconn, err := grpc.Dial(
 		config.SpanxAddress,
@@ -71,11 +78,11 @@ func (s *service) Start(listenAddr, cert, certkey string) error {
 	return server.Serve(lis)
 }
 
-func (s *service) requestSession(ctx context.Context, req *opsee.BezosRequest, endpoint string) (*session, error) {
-	logger := log.WithField("endpoint", endpoint)
+func (s *service) requestSession(ctx context.Context, req *opsee.BezosRequest, input interface{}, output interface{}) (*session, error) {
+	logger := log.WithField("input", reflect.TypeOf(input).Elem().Name())
 
-	if req.Input == nil {
-		logger.WithError(ErrNoInput).Errorf("invalid input %#v", req.Input)
+	if input == nil {
+		logger.WithError(ErrNoInput).Errorf("invalid input %#v", input)
 		return nil, ErrNoInput
 	}
 
@@ -106,13 +113,32 @@ func (s *service) requestSession(ctx context.Context, req *opsee.BezosRequest, e
 
 	logger.Info("valid grpc request")
 
+	sesh := &session{
+		log: logger,
+	}
+
+	err := s.db.Get(store.Request{
+		CustomerId: req.User.CustomerId,
+		Input:      input,
+		Output:     output,
+		MaxAge:     req.MaxAge,
+	})
+
+	if err != nil {
+		sesh.log.WithError(err).Error("cache miss")
+	} else {
+		sesh.log.Info("cache hit")
+		sesh.cached = true
+		return sesh, nil
+	}
+
 	creds, err := s.spanxClient.GetCredentials(ctx, &opsee.GetCredentialsRequest{User: req.User})
 	if err != nil {
 		logger.WithError(err).Error(ErrInvalidCredentials.Error())
 		return nil, ErrInvalidCredentials
 	}
 
-	sess := aws_session.New(&aws.Config{
+	sesh.session = aws_session.New(&aws.Config{
 		Region: aws.String(req.Region),
 		Credentials: credentials.NewStaticCredentials(
 			creds.Credentials.GetAccessKeyID(),
@@ -121,8 +147,5 @@ func (s *service) requestSession(ctx context.Context, req *opsee.BezosRequest, e
 		),
 	})
 
-	return &session{
-		session: sess,
-		log:     logger,
-	}, nil
+	return sesh, nil
 }

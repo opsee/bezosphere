@@ -1,0 +1,5 @@
+postgres:
+  image: postgres:9.5
+  environment:
+    PSQL_TRUST_LOCALNET: "true"
+    POSTGRES_DB: bezosphere_test

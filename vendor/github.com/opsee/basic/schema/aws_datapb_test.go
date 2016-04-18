@@ -23,7 +23,9 @@ It has these top-level messages:
 	Header
 	HttpCheck
 	CloudWatchCheck
+	CloudWatchMetric
 	CloudWatchResponse
+	Tag
 	Metric
 	HttpResponse
 	CheckResponse
