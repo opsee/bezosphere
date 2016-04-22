@@ -531,67 +531,67 @@
 			"revisionTime": "2016-02-11T19:18:39-08:00"
 		},
 		{
-			"checksumSHA1": "z02ct9Si+aPNEmpVQrl2/J8EWks=",
+			"checksumSHA1": "kkbdhvUOe6OQqraZd/7YeK+rMS0=",
 			"origin": "github.com/opsee/bezosphere/vendor/github.com/opsee/basic/schema",
 			"path": "github.com/opsee/basic/schema",
-			"revision": "02ecff6f3f4e9570d4a0a488bb14b05ea78afa3e",
-			"revisionTime": "2016-04-14T14:22:47-04:00"
+			"revision": "13decdef7eeb2030a71787f80ecb7899b07ee71d",
+			"revisionTime": "2016-04-21T09:26:00-07:00"
 		},
 		{
 			"checksumSHA1": "1IpgvtZWkeTojMewnjn8eofNKT0=",
 			"origin": "github.com/opsee/bezosphere/vendor/github.com/opsee/basic/schema/aws",
 			"path": "github.com/opsee/basic/schema/aws",
-			"revision": "02ecff6f3f4e9570d4a0a488bb14b05ea78afa3e",
-			"revisionTime": "2016-04-14T14:22:47-04:00"
+			"revision": "13decdef7eeb2030a71787f80ecb7899b07ee71d",
+			"revisionTime": "2016-04-21T09:26:00-07:00"
 		},
 		{
 			"checksumSHA1": "RQnSFwVWFpfdl2YaUH8+GctNvyg=",
 			"origin": "github.com/opsee/bezosphere/vendor/github.com/opsee/basic/schema/aws/autoscaling",
 			"path": "github.com/opsee/basic/schema/aws/autoscaling",
-			"revision": "02ecff6f3f4e9570d4a0a488bb14b05ea78afa3e",
-			"revisionTime": "2016-04-14T14:22:47-04:00"
+			"revision": "13decdef7eeb2030a71787f80ecb7899b07ee71d",
+			"revisionTime": "2016-04-21T09:26:00-07:00"
 		},
 		{
 			"checksumSHA1": "5yySusENXUldjK/3kqWxgrkoUh8=",
 			"origin": "github.com/opsee/bezosphere/vendor/github.com/opsee/basic/schema/aws/cloudwatch",
 			"path": "github.com/opsee/basic/schema/aws/cloudwatch",
-			"revision": "02ecff6f3f4e9570d4a0a488bb14b05ea78afa3e",
-			"revisionTime": "2016-04-14T14:22:47-04:00"
+			"revision": "13decdef7eeb2030a71787f80ecb7899b07ee71d",
+			"revisionTime": "2016-04-21T09:26:00-07:00"
 		},
 		{
 			"checksumSHA1": "weeIJU0b06nH4cHvIcKSzNzbxts=",
 			"origin": "github.com/opsee/bezosphere/vendor/github.com/opsee/basic/schema/aws/credentials",
 			"path": "github.com/opsee/basic/schema/aws/credentials",
-			"revision": "02ecff6f3f4e9570d4a0a488bb14b05ea78afa3e",
-			"revisionTime": "2016-04-14T14:22:47-04:00"
+			"revision": "13decdef7eeb2030a71787f80ecb7899b07ee71d",
+			"revisionTime": "2016-04-21T09:26:00-07:00"
 		},
 		{
 			"checksumSHA1": "2pIFzjtzrmNmaJY+HLH9XIUFagA=",
 			"origin": "github.com/opsee/bezosphere/vendor/github.com/opsee/basic/schema/aws/ec2",
 			"path": "github.com/opsee/basic/schema/aws/ec2",
-			"revision": "02ecff6f3f4e9570d4a0a488bb14b05ea78afa3e",
-			"revisionTime": "2016-04-14T14:22:47-04:00"
+			"revision": "13decdef7eeb2030a71787f80ecb7899b07ee71d",
+			"revisionTime": "2016-04-21T09:26:00-07:00"
 		},
 		{
 			"checksumSHA1": "P1kNoPDJDpQm4vTs121rs/MQ2is=",
 			"origin": "github.com/opsee/bezosphere/vendor/github.com/opsee/basic/schema/aws/elb",
 			"path": "github.com/opsee/basic/schema/aws/elb",
-			"revision": "02ecff6f3f4e9570d4a0a488bb14b05ea78afa3e",
-			"revisionTime": "2016-04-14T14:22:47-04:00"
+			"revision": "13decdef7eeb2030a71787f80ecb7899b07ee71d",
+			"revisionTime": "2016-04-21T09:26:00-07:00"
 		},
 		{
 			"checksumSHA1": "E4ZDBNCqdzqX84civO/RBvHfsMk=",
 			"origin": "github.com/opsee/bezosphere/vendor/github.com/opsee/basic/schema/aws/rds",
 			"path": "github.com/opsee/basic/schema/aws/rds",
-			"revision": "02ecff6f3f4e9570d4a0a488bb14b05ea78afa3e",
-			"revisionTime": "2016-04-14T14:22:47-04:00"
+			"revision": "13decdef7eeb2030a71787f80ecb7899b07ee71d",
+			"revisionTime": "2016-04-21T09:26:00-07:00"
 		},
 		{
-			"checksumSHA1": "Nk2NCVGyAJFfgw4EBNbm+zgs3Z4=",
+			"checksumSHA1": "NRjAt1Jxvong680xWoxmX+apBk4=",
 			"origin": "github.com/opsee/bezosphere/vendor/github.com/opsee/basic/service",
 			"path": "github.com/opsee/basic/service",
-			"revision": "02ecff6f3f4e9570d4a0a488bb14b05ea78afa3e",
-			"revisionTime": "2016-04-14T14:22:47-04:00"
+			"revision": "13decdef7eeb2030a71787f80ecb7899b07ee71d",
+			"revisionTime": "2016-04-21T09:26:00-07:00"
 		},
 		{
 			"checksumSHA1": "AdAlxYpERfxuIqtd5eQ0LumzbrE=",
