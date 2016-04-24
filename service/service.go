@@ -3,9 +3,22 @@ package service
 import (
 	"crypto/tls"
 	"errors"
+	"fmt"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/credentials"
-	aws_session "github.com/aws/aws-sdk-go/aws/session"
+	"github.com/aws/aws-sdk-go/aws/request"
+	"github.com/aws/aws-sdk-go/aws/session"
+	"github.com/aws/aws-sdk-go/service/autoscaling"
+	"github.com/aws/aws-sdk-go/service/cloudwatch"
+	"github.com/aws/aws-sdk-go/service/ec2"
+	"github.com/aws/aws-sdk-go/service/elb"
+	"github.com/aws/aws-sdk-go/service/rds"
+	opsee_aws "github.com/opsee/basic/schema/aws"
+	opsee_aws_autoscaling "github.com/opsee/basic/schema/aws/autoscaling"
+	opsee_aws_cloudwatch "github.com/opsee/basic/schema/aws/cloudwatch"
+	opsee_aws_ec2 "github.com/opsee/basic/schema/aws/ec2"
+	opsee_aws_elb "github.com/opsee/basic/schema/aws/elb"
+	opsee_aws_rds "github.com/opsee/basic/schema/aws/rds"
 	opsee "github.com/opsee/basic/service"
 	"github.com/opsee/bezosphere/store"
 	log "github.com/sirupsen/logrus"
@@ -28,12 +41,6 @@ var (
 type service struct {
 	spanxClient opsee.SpanxClient
 	db          store.Store
-}
-
-type session struct {
-	session *aws_session.Session
-	log     *log.Entry
-	cached  bool
 }
 
 type Config struct {
@@ -78,11 +85,11 @@ func (s *service) Start(listenAddr, cert, certkey string) error {
 	return server.Serve(lis)
 }
 
-func (s *service) requestSession(ctx context.Context, req *opsee.BezosRequest, input interface{}, output interface{}) (*session, error) {
-	logger := log.WithField("input", reflect.TypeOf(input).Elem().Name())
+func (s *service) Get(ctx context.Context, req *opsee.BezosRequest) (*opsee.BezosResponse, error) {
+	logger := log.WithField("input", reflect.TypeOf(req.Input).Elem().Name())
 
-	if input == nil {
-		logger.WithError(ErrNoInput).Errorf("invalid input %#v", input)
+	if req.Input == nil {
+		logger.WithError(ErrNoInput).Errorf("invalid input %#v", req.Input)
 		return nil, ErrNoInput
 	}
 
@@ -113,23 +120,33 @@ func (s *service) requestSession(ctx context.Context, req *opsee.BezosRequest, i
 
 	logger.Info("valid grpc request")
 
-	sesh := &session{
-		log: logger,
+	input, output, err := inputOutput(req.Input)
+	if err != nil {
+		logger.WithError(err).Error("error finding output")
+		return nil, err
 	}
 
-	err := s.db.Get(store.Request{
+	err = s.db.Get(store.Request{
 		CustomerId: req.User.CustomerId,
 		Input:      input,
 		Output:     output,
 		MaxAge:     req.MaxAge,
 	})
 
+	var response *opsee.BezosResponse
+
 	if err != nil {
-		sesh.log.WithError(err).Error("cache miss")
+		logger.WithError(err).Error("cache miss")
 	} else {
-		sesh.log.Info("cache hit")
-		sesh.cached = true
-		return sesh, nil
+		logger.Info("cache hit")
+
+		response, err = buildResponse(output)
+		if err != nil {
+			logger.WithError(err).Error("no response found")
+			return nil, err
+		}
+
+		return response, nil
 	}
 
 	creds, err := s.spanxClient.GetCredentials(ctx, &opsee.GetCredentialsRequest{User: req.User})
@@ -138,7 +155,7 @@ func (s *service) requestSession(ctx context.Context, req *opsee.BezosRequest, i
 		return nil, ErrInvalidCredentials
 	}
 
-	sesh.session = aws_session.New(&aws.Config{
+	session := session.New(&aws.Config{
 		Region: aws.String(req.Region),
 		Credentials: credentials.NewStaticCredentials(
 			creds.Credentials.GetAccessKeyID(),
@@ -147,5 +164,195 @@ func (s *service) requestSession(ctx context.Context, req *opsee.BezosRequest, i
 		),
 	})
 
-	return sesh, nil
+	err = dispatchRequest(ctx, logger, session, input, output)
+	if err != nil {
+		return nil, err
+	}
+
+	err = s.db.Put(store.Request{
+		CustomerId: req.User.CustomerId,
+		Input:      input,
+		Output:     output,
+	})
+
+	if err != nil {
+		logger.WithError(err).Error("error saving to cache")
+		// just continue on
+	}
+
+	response, err = buildResponse(output)
+	if err != nil {
+		logger.WithError(err).Error("no response found")
+		return nil, err
+	}
+
+	return response, nil
+}
+
+func dispatchRequest(ctx context.Context, logger *log.Entry, session *session.Session, input interface{}, output interface{}) error {
+	var (
+		err        error
+		awsRequest *request.Request
+		awsOutput  interface{}
+	)
+
+	switch input.(type) {
+	case *opsee_aws_cloudwatch.ListMetricsInput:
+		awsRequest, awsOutput = cloudwatch.New(session).ListMetricsRequest(nil)
+		awsRequest.Params = input
+		err = awsRequest.Send()
+
+	case *opsee_aws_cloudwatch.GetMetricStatisticsInput:
+		awsRequest, awsOutput = cloudwatch.New(session).GetMetricStatisticsRequest(nil)
+		awsRequest.Params = input
+		err = awsRequest.Send()
+
+	case *opsee_aws_ec2.DescribeInstancesInput:
+		awsRequest, awsOutput = ec2.New(session).DescribeInstancesRequest(nil)
+		awsRequest.Params = input
+		err = awsRequest.Send()
+
+	case *opsee_aws_ec2.DescribeSecurityGroupsInput:
+		awsRequest, awsOutput = ec2.New(session).DescribeSecurityGroupsRequest(nil)
+		awsRequest.Params = input
+		err = awsRequest.Send()
+
+	case *opsee_aws_ec2.DescribeSubnetsInput:
+		awsRequest, awsOutput = ec2.New(session).DescribeSubnetsRequest(nil)
+		awsRequest.Params = input
+		err = awsRequest.Send()
+
+	case *opsee_aws_ec2.DescribeVpcsInput:
+		awsRequest, awsOutput = ec2.New(session).DescribeVpcsRequest(nil)
+		awsRequest.Params = input
+		err = awsRequest.Send()
+
+	case *opsee_aws_ec2.DescribeRouteTablesInput:
+		awsRequest, awsOutput = ec2.New(session).DescribeRouteTablesRequest(nil)
+		awsRequest.Params = input
+		err = awsRequest.Send()
+
+	case *opsee_aws_elb.DescribeLoadBalancersInput:
+		awsRequest, awsOutput = elb.New(session).DescribeLoadBalancersRequest(nil)
+		awsRequest.Params = input
+		err = awsRequest.Send()
+
+	case *opsee_aws_autoscaling.DescribeAutoScalingGroupsInput:
+		awsRequest, awsOutput = autoscaling.New(session).DescribeAutoScalingGroupsRequest(nil)
+		awsRequest.Params = input
+		err = awsRequest.Send()
+
+	case *opsee_aws_rds.DescribeDBInstancesInput:
+		awsRequest, awsOutput = rds.New(session).DescribeDBInstancesRequest(nil)
+		awsRequest.Params = input
+		err = awsRequest.Send()
+
+	default:
+		return fmt.Errorf("input type not found: %#v", input)
+	}
+
+	if err != nil {
+		logger.WithError(err).Error("aws request error")
+		return err
+	}
+
+	opsee_aws.CopyInto(output, awsOutput)
+	return nil
+}
+
+func inputOutput(ipt interface{}) (interface{}, interface{}, error) {
+	var (
+		input  interface{}
+		output interface{}
+	)
+
+	switch ipt.(type) {
+	case *opsee.BezosRequest_Cloudwatch_ListMetricsInput:
+		input = &opsee_aws_cloudwatch.ListMetricsInput{}
+		output = &opsee_aws_cloudwatch.ListMetricsOutput{}
+
+	case *opsee.BezosRequest_Cloudwatch_GetMetricStatisticsInput:
+		input = &opsee_aws_cloudwatch.GetMetricStatisticsInput{}
+		output = &opsee_aws_cloudwatch.GetMetricStatisticsOutput{}
+
+	case *opsee.BezosRequest_Ec2_DescribeInstancesInput:
+		input = &opsee_aws_ec2.DescribeInstancesInput{}
+		output = &opsee_aws_ec2.DescribeInstancesOutput{}
+
+	case *opsee.BezosRequest_Ec2_DescribeSecurityGroupsInput:
+		input = &opsee_aws_ec2.DescribeSecurityGroupsInput{}
+		output = &opsee_aws_ec2.DescribeSecurityGroupsOutput{}
+
+	case *opsee.BezosRequest_Ec2_DescribeSubnetsInput:
+		input = &opsee_aws_ec2.DescribeSubnetsInput{}
+		output = &opsee_aws_ec2.DescribeSubnetsOutput{}
+
+	case *opsee.BezosRequest_Ec2_DescribeVpcsInput:
+		input = &opsee_aws_ec2.DescribeVpcsInput{}
+		output = &opsee_aws_ec2.DescribeVpcsOutput{}
+
+	case *opsee.BezosRequest_Ec2_DescribeRouteTablesInput:
+		input = &opsee_aws_ec2.DescribeRouteTablesInput{}
+		output = &opsee_aws_ec2.DescribeRouteTablesOutput{}
+
+	case *opsee.BezosRequest_Elb_DescribeLoadBalancersInput:
+		input = &opsee_aws_elb.DescribeLoadBalancersInput{}
+		output = &opsee_aws_elb.DescribeLoadBalancersOutput{}
+
+	case *opsee.BezosRequest_Autoscaling_DescribeAutoScalingGroupsInput:
+		input = &opsee_aws_autoscaling.DescribeAutoScalingGroupsInput{}
+		output = &opsee_aws_autoscaling.DescribeAutoScalingGroupsOutput{}
+
+	case *opsee.BezosRequest_Rds_DescribeDBInstancesInput:
+		input = &opsee_aws_rds.DescribeDBInstancesInput{}
+		output = &opsee_aws_rds.DescribeDBInstancesOutput{}
+
+	default:
+		return nil, nil, fmt.Errorf("input type not found: %#v", ipt)
+	}
+
+	return input, output, nil
+}
+
+func buildResponse(opt interface{}) (*opsee.BezosResponse, error) {
+	var (
+		response *opsee.BezosResponse
+	)
+
+	switch t := opt.(type) {
+	case *opsee_aws_cloudwatch.ListMetricsOutput:
+		response = &opsee.BezosResponse{Output: &opsee.BezosResponse_Cloudwatch_ListMetricsOutput{t}}
+
+	case *opsee_aws_cloudwatch.GetMetricStatisticsOutput:
+		response = &opsee.BezosResponse{Output: &opsee.BezosResponse_Cloudwatch_GetMetricStatisticsOutput{t}}
+
+	case *opsee_aws_ec2.DescribeInstancesOutput:
+		response = &opsee.BezosResponse{Output: &opsee.BezosResponse_Ec2_DescribeInstancesOutput{t}}
+
+	case *opsee_aws_ec2.DescribeSecurityGroupsOutput:
+		response = &opsee.BezosResponse{Output: &opsee.BezosResponse_Ec2_DescribeSecurityGroupsOutput{t}}
+
+	case *opsee_aws_ec2.DescribeSubnetsOutput:
+		response = &opsee.BezosResponse{Output: &opsee.BezosResponse_Ec2_DescribeSubnetsOutput{t}}
+
+	case *opsee_aws_ec2.DescribeVpcsOutput:
+		response = &opsee.BezosResponse{Output: &opsee.BezosResponse_Ec2_DescribeVpcsOutput{t}}
+
+	case *opsee_aws_ec2.DescribeRouteTablesOutput:
+		response = &opsee.BezosResponse{Output: &opsee.BezosResponse_Ec2_DescribeRouteTablesOutput{t}}
+
+	case *opsee_aws_elb.DescribeLoadBalancersOutput:
+		response = &opsee.BezosResponse{Output: &opsee.BezosResponse_Elb_DescribeLoadBalancersOutput{t}}
+
+	case *opsee_aws_autoscaling.DescribeAutoScalingGroupsOutput:
+		response = &opsee.BezosResponse{Output: &opsee.BezosResponse_Autoscaling_DescribeAutoScalingGroupsOutput{t}}
+
+	case *opsee_aws_rds.DescribeDBInstancesOutput:
+		response = &opsee.BezosResponse{Output: &opsee.BezosResponse_Rds_DescribeDBInstancesOutput{t}}
+
+	default:
+		return nil, fmt.Errorf("output type not found: %#v", t)
+	}
+
+	return response, nil
 }

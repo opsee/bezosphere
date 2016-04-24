@@ -19,6 +19,7 @@ It has these top-level messages:
 	Instance
 	Target
 	Check
+	Notification
 	Assertion
 	Header
 	HttpCheck
