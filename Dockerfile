@@ -17,6 +17,7 @@ ENV APPENV ""
 COPY run.sh /
 COPY key.pem /
 COPY cert.pem /
+COPY migrations /migrations
 COPY target/linux/amd64/bin/* /
 
 EXPOSE 9104
