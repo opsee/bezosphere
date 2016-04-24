@@ -268,43 +268,43 @@ func inputOutput(ipt interface{}) (interface{}, interface{}, error) {
 
 	switch ipt.(type) {
 	case *opsee.BezosRequest_Cloudwatch_ListMetricsInput:
-		input = &opsee_aws_cloudwatch.ListMetricsInput{}
+		input = ipt.Cloudwatch_ListMetricsInput
 		output = &opsee_aws_cloudwatch.ListMetricsOutput{}
 
 	case *opsee.BezosRequest_Cloudwatch_GetMetricStatisticsInput:
-		input = &opsee_aws_cloudwatch.GetMetricStatisticsInput{}
+		input = ipt.Cloudwatch_GetMetricStatisticsInput
 		output = &opsee_aws_cloudwatch.GetMetricStatisticsOutput{}
 
 	case *opsee.BezosRequest_Ec2_DescribeInstancesInput:
-		input = &opsee_aws_ec2.DescribeInstancesInput{}
+		input = ipt.Ec2_DescribeInstancesInput
 		output = &opsee_aws_ec2.DescribeInstancesOutput{}
 
 	case *opsee.BezosRequest_Ec2_DescribeSecurityGroupsInput:
-		input = &opsee_aws_ec2.DescribeSecurityGroupsInput{}
+		input = ipt.Ec2_DescribeSecurityGroupsInput
 		output = &opsee_aws_ec2.DescribeSecurityGroupsOutput{}
 
 	case *opsee.BezosRequest_Ec2_DescribeSubnetsInput:
-		input = &opsee_aws_ec2.DescribeSubnetsInput{}
+		input = ipt.Ec2_DescribeSubnetsInput
 		output = &opsee_aws_ec2.DescribeSubnetsOutput{}
 
 	case *opsee.BezosRequest_Ec2_DescribeVpcsInput:
-		input = &opsee_aws_ec2.DescribeVpcsInput{}
+		input = ipt.Ec2_DescribeVpcsInput
 		output = &opsee_aws_ec2.DescribeVpcsOutput{}
 
 	case *opsee.BezosRequest_Ec2_DescribeRouteTablesInput:
-		input = &opsee_aws_ec2.DescribeRouteTablesInput{}
+		input = ipt.Ec2_DescribeRouteTablesInput
 		output = &opsee_aws_ec2.DescribeRouteTablesOutput{}
 
 	case *opsee.BezosRequest_Elb_DescribeLoadBalancersInput:
-		input = &opsee_aws_elb.DescribeLoadBalancersInput{}
+		input = ipt.Elb_DescribeLoadBalancersInput
 		output = &opsee_aws_elb.DescribeLoadBalancersOutput{}
 
 	case *opsee.BezosRequest_Autoscaling_DescribeAutoScalingGroupsInput:
-		input = &opsee_aws_autoscaling.DescribeAutoScalingGroupsInput{}
+		input = ipt.Autoscaling_DescribeAutoScalingGroupsInput
 		output = &opsee_aws_autoscaling.DescribeAutoScalingGroupsOutput{}
 
 	case *opsee.BezosRequest_Rds_DescribeDBInstancesInput:
-		input = &opsee_aws_rds.DescribeDBInstancesInput{}
+		input = ipt.Rds_DescribeDBInstancesInput
 		output = &opsee_aws_rds.DescribeDBInstancesOutput{}
 
 	default:
