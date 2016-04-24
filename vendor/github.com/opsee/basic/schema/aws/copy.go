@@ -1,6 +1,7 @@
 package aws
 
 import (
+	"github.com/aws/aws-sdk-go/aws"
 	opsee_types "github.com/opsee/protobuf/opseeproto/types"
 	"io"
 	"reflect"
@@ -48,7 +49,7 @@ func rcopy(dst, src reflect.Value, root bool) {
 		} else if tt, ok := src.Interface().(*opsee_types.Timestamp); ok {
 			if tt != nil && dst.CanSet() {
 				t, _ := tt.Value()
-				dst.Set(reflect.ValueOf(t.(time.Time)).Addr())
+				dst.Set(reflect.ValueOf(aws.Time(t.(time.Time))))
 			}
 		} else if dst.Kind() != reflect.Ptr {
 			if dst.CanSet() && !src.IsNil() {
