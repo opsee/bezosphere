@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/credentials"
-	"github.com/aws/aws-sdk-go/aws/request"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/autoscaling"
 	"github.com/aws/aws-sdk-go/service/cloudwatch"
@@ -191,61 +190,60 @@ func (s *service) Get(ctx context.Context, req *opsee.BezosRequest) (*opsee.Bezo
 
 func dispatchRequest(ctx context.Context, logger *log.Entry, session *session.Session, input interface{}, output interface{}) error {
 	var (
-		err        error
-		awsRequest *request.Request
-		awsOutput  interface{}
+		err       error
+		awsOutput interface{}
 	)
 
 	switch input.(type) {
 	case *opsee_aws_cloudwatch.ListMetricsInput:
-		awsRequest, awsOutput = cloudwatch.New(session).ListMetricsRequest(nil)
-		awsRequest.Params = input
-		err = awsRequest.Send()
+		ipt := &cloudwatch.ListMetricsInput{}
+		opsee_aws.CopyInto(ipt, input)
+		awsOutput, err = cloudwatch.New(session).ListMetrics(ipt)
 
 	case *opsee_aws_cloudwatch.GetMetricStatisticsInput:
-		awsRequest, awsOutput = cloudwatch.New(session).GetMetricStatisticsRequest(nil)
-		awsRequest.Params = input
-		err = awsRequest.Send()
+		ipt := &cloudwatch.GetMetricStatisticsInput{}
+		opsee_aws.CopyInto(ipt, input)
+		awsOutput, err = cloudwatch.New(session).GetMetricStatistics(ipt)
 
 	case *opsee_aws_ec2.DescribeInstancesInput:
-		awsRequest, awsOutput = ec2.New(session).DescribeInstancesRequest(nil)
-		awsRequest.Params = input
-		err = awsRequest.Send()
+		ipt := &ec2.DescribeInstancesInput{}
+		opsee_aws.CopyInto(ipt, input)
+		awsOutput, err = ec2.New(session).DescribeInstances(ipt)
 
 	case *opsee_aws_ec2.DescribeSecurityGroupsInput:
-		awsRequest, awsOutput = ec2.New(session).DescribeSecurityGroupsRequest(nil)
-		awsRequest.Params = input
-		err = awsRequest.Send()
+		ipt := &ec2.DescribeSecurityGroupsInput{}
+		opsee_aws.CopyInto(ipt, input)
+		awsOutput, err = ec2.New(session).DescribeSecurityGroups(ipt)
 
 	case *opsee_aws_ec2.DescribeSubnetsInput:
-		awsRequest, awsOutput = ec2.New(session).DescribeSubnetsRequest(nil)
-		awsRequest.Params = input
-		err = awsRequest.Send()
+		ipt := &ec2.DescribeSubnetsInput{}
+		opsee_aws.CopyInto(ipt, input)
+		awsOutput, err = ec2.New(session).DescribeSubnets(ipt)
 
 	case *opsee_aws_ec2.DescribeVpcsInput:
-		awsRequest, awsOutput = ec2.New(session).DescribeVpcsRequest(nil)
-		awsRequest.Params = input
-		err = awsRequest.Send()
+		ipt := &ec2.DescribeVpcsInput{}
+		opsee_aws.CopyInto(ipt, input)
+		awsOutput, err = ec2.New(session).DescribeVpcs(ipt)
 
 	case *opsee_aws_ec2.DescribeRouteTablesInput:
-		awsRequest, awsOutput = ec2.New(session).DescribeRouteTablesRequest(nil)
-		awsRequest.Params = input
-		err = awsRequest.Send()
+		ipt := &ec2.DescribeRouteTablesInput{}
+		opsee_aws.CopyInto(ipt, input)
+		awsOutput, err = ec2.New(session).DescribeRouteTables(ipt)
 
 	case *opsee_aws_elb.DescribeLoadBalancersInput:
-		awsRequest, awsOutput = elb.New(session).DescribeLoadBalancersRequest(nil)
-		awsRequest.Params = input
-		err = awsRequest.Send()
+		ipt := &elb.DescribeLoadBalancersInput{}
+		opsee_aws.CopyInto(ipt, input)
+		awsOutput, err = elb.New(session).DescribeLoadBalancers(ipt)
 
 	case *opsee_aws_autoscaling.DescribeAutoScalingGroupsInput:
-		awsRequest, awsOutput = autoscaling.New(session).DescribeAutoScalingGroupsRequest(nil)
-		awsRequest.Params = input
-		err = awsRequest.Send()
+		ipt := &autoscaling.DescribeAutoScalingGroupsInput{}
+		opsee_aws.CopyInto(ipt, input)
+		awsOutput, err = autoscaling.New(session).DescribeAutoScalingGroups(ipt)
 
 	case *opsee_aws_rds.DescribeDBInstancesInput:
-		awsRequest, awsOutput = rds.New(session).DescribeDBInstancesRequest(nil)
-		awsRequest.Params = input
-		err = awsRequest.Send()
+		ipt := &rds.DescribeDBInstancesInput{}
+		opsee_aws.CopyInto(ipt, input)
+		awsOutput, err = rds.New(session).DescribeDBInstances(ipt)
 
 	default:
 		return fmt.Errorf("input type not found: %#v", input)
