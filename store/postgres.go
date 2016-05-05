@@ -103,7 +103,7 @@ func (s *postgres) get(x sqlx.Ext, req Request) error {
 	}
 
 	// stuff in the db is expired, just ignore it
-	if resource.UpdatedAt.Millis() > req.MaxAge.Millis() {
+	if resource.UpdatedAt.Millis() < req.MaxAge.Millis() {
 		return errResourceExpired
 	}
 
