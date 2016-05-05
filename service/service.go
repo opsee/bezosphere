@@ -125,12 +125,13 @@ func (s *service) Get(ctx context.Context, req *opsee.BezosRequest) (*opsee.Bezo
 		return nil, err
 	}
 
-	err = s.db.Get(store.Request{
+	/*err = s.db.Get(store.Request{
 		CustomerId: req.User.CustomerId,
 		Input:      input,
 		Output:     output,
 		MaxAge:     req.MaxAge,
-	})
+	})*/
+	err = errors.New("cache disabled")
 
 	var response *opsee.BezosResponse
 
