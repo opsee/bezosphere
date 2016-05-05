@@ -2,6 +2,38 @@
 // source: checks.proto
 // DO NOT EDIT!
 
+/*
+Package schema is a generated protocol buffer package.
+
+It is generated from these files:
+	checks.proto
+	region.proto
+	stack.proto
+	user.proto
+
+It has these top-level messages:
+	Target
+	Check
+	Notification
+	Assertion
+	Header
+	HttpCheck
+	CloudWatchCheck
+	CloudWatchMetric
+	CloudWatchResponse
+	Tag
+	Metric
+	HttpResponse
+	CheckResponse
+	CheckResult
+	Region
+	Vpc
+	Subnet
+	BastionState
+	Stack
+	User
+	Customer
+*/
 package schema
 
 import testing "testing"

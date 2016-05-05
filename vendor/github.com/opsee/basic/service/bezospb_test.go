@@ -21,6 +21,7 @@ It has these top-level messages:
 	ResultsResource
 	TestCheckRequest
 	TestCheckResponse
+	Filter
 	ListBastionStatesRequest
 	ListBastionStatesResponse
 	ScanVpcsRequest
