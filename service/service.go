@@ -5,7 +5,6 @@ import (
 	"errors"
 	"fmt"
 	"github.com/aws/aws-sdk-go/aws"
-	"github.com/aws/aws-sdk-go/aws/credentials"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/autoscaling"
 	"github.com/aws/aws-sdk-go/service/cloudwatch"
@@ -20,6 +19,7 @@ import (
 	opsee_aws_rds "github.com/opsee/basic/schema/aws/rds"
 	opsee "github.com/opsee/basic/service"
 	"github.com/opsee/bezosphere/store"
+	"github.com/opsee/spanx/spanxcreds"
 	log "github.com/sirupsen/logrus"
 	"golang.org/x/net/context"
 	"google.golang.org/grpc"
@@ -148,19 +148,9 @@ func (s *service) Get(ctx context.Context, req *opsee.BezosRequest) (*opsee.Bezo
 		return response, nil
 	}
 
-	creds, err := s.spanxClient.GetCredentials(ctx, &opsee.GetCredentialsRequest{User: req.User})
-	if err != nil {
-		logger.WithError(err).Error(ErrInvalidCredentials.Error())
-		return nil, ErrInvalidCredentials
-	}
-
 	session := session.New(&aws.Config{
-		Region: aws.String(req.Region),
-		Credentials: credentials.NewStaticCredentials(
-			creds.Credentials.GetAccessKeyID(),
-			creds.Credentials.GetSecretAccessKey(),
-			creds.Credentials.GetSessionToken(),
-		),
+		Region:      aws.String(req.Region),
+		Credentials: spanxcreds.NewSpanxCredentials(req.User, s.spanxClient),
 	})
 
 	err = dispatchRequest(ctx, logger, session, input, output)
