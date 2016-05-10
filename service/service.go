@@ -125,12 +125,16 @@ func (s *service) Get(ctx context.Context, req *opsee.BezosRequest) (*opsee.Bezo
 		return nil, err
 	}
 
-	err = s.db.Get(store.Request{
-		CustomerId: req.User.CustomerId,
-		Input:      input,
-		Output:     output,
-		MaxAge:     req.MaxAge,
-	})
+	if shouldSkipCache(req.Input) {
+		err = errors.New("input type not cached")
+	} else {
+		err = s.db.Get(store.Request{
+			CustomerId: req.User.CustomerId,
+			Input:      input,
+			Output:     output,
+			MaxAge:     req.MaxAge,
+		})
+	}
 
 	var response *opsee.BezosResponse
 
@@ -176,6 +180,14 @@ func (s *service) Get(ctx context.Context, req *opsee.BezosRequest) (*opsee.Bezo
 	}
 
 	return response, nil
+}
+
+func shouldSkipCache(input interface{}) bool {
+	switch input.(type) {
+	case *opsee.BezosRequest_Cloudwatch_GetMetricStatisticsInput:
+		return true
+	}
+	return false
 }
 
 func dispatchRequest(ctx context.Context, logger *log.Entry, session *session.Session, input interface{}, output interface{}) error {
