@@ -38,7 +38,8 @@ message BezosRequest {
     aws.rds.DescribeDBInstancesInput rds_DescribeDBInstancesInput = 501;
 	
 	aws.ecs.ListTasksInput ecs_ListTasksInput = 601;
-	aws.ecs.DescribeContainerInstancesInput ecs_DescribeContainerInstancesInput = 602;
+	aws.ecs.DescribeTasksInput ecs_DescribeTasksInput = 602;
+	aws.ecs.DescribeContainerInstancesInput ecs_DescribeContainerInstancesInput = 603;
   }
 }
 
@@ -62,7 +63,8 @@ message BezosResponse {
     aws.rds.DescribeDBInstancesOutput rds_DescribeDBInstancesOutput = 501;
 	
 	aws.ecs.ListTasksOutput ecs_ListTasksOutput = 601;
-	aws.ecs.DescribeContainerInstancesOutput ecs_DescribeContainerInstancesOutput = 602;
+	aws.ecs.DescribeTasksOutput ecs_DescribeTasksOutput = 602;
+	aws.ecs.DescribeContainerInstancesOutput ecs_DescribeContainerInstancesOutput = 603;
   }
 }
 
