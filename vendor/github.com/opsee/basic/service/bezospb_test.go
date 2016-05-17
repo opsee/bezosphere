@@ -32,8 +32,8 @@ It has these top-level messages:
 	AuthenticateBastionResponse
 	EnhancedCombatModeRequest
 	EnhancedCombatModeResponse
-	PutRoleRequest
-	PutRoleResponse
+	GetRoleStackRequest
+	GetRoleStackResponse
 	GetCredentialsRequest
 	GetCredentialsResponse
 	GetUserRequest
@@ -56,6 +56,7 @@ import _ "github.com/opsee/protobuf/opseeproto"
 import _ "github.com/opsee/protobuf/opseeproto/types"
 import _ "github.com/opsee/basic/schema/aws/cloudwatch"
 import _ "github.com/opsee/basic/schema/aws/ec2"
+import _ "github.com/opsee/basic/schema/aws/ecs"
 import _ "github.com/opsee/basic/schema/aws/elb"
 import _ "github.com/opsee/basic/schema/aws/autoscaling"
 import _ "github.com/opsee/basic/schema/aws/rds"

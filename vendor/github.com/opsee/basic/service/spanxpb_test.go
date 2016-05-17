@@ -16,6 +16,7 @@ import _ "github.com/opsee/protobuf/opseeproto"
 import _ "github.com/opsee/protobuf/opseeproto/types"
 import _ "github.com/opsee/basic/schema/aws/credentials"
 import _ "github.com/opsee/basic/schema"
+import _ "github.com/opsee/basic/schema"
 
 // Reference imports to suppress errors if they are not otherwise used.
 var _ = proto.Marshal
@@ -134,15 +135,15 @@ func TestEnhancedCombatModeResponseMarshalTo(t *testing.T) {
 	}
 }
 
-func TestPutRoleRequestProto(t *testing.T) {
+func TestGetRoleStackRequestProto(t *testing.T) {
 	seed := time.Now().UnixNano()
 	popr := math_rand.New(math_rand.NewSource(seed))
-	p := NewPopulatedPutRoleRequest(popr, false)
+	p := NewPopulatedGetRoleStackRequest(popr, false)
 	data, err := github_com_gogo_protobuf_proto.Marshal(p)
 	if err != nil {
 		t.Fatalf("seed = %d, err = %v", seed, err)
 	}
-	msg := &PutRoleRequest{}
+	msg := &GetRoleStackRequest{}
 	if err := github_com_gogo_protobuf_proto.Unmarshal(data, msg); err != nil {
 		t.Fatalf("seed = %d, err = %v", seed, err)
 	}
@@ -165,10 +166,10 @@ func TestPutRoleRequestProto(t *testing.T) {
 	}
 }
 
-func TestPutRoleRequestMarshalTo(t *testing.T) {
+func TestGetRoleStackRequestMarshalTo(t *testing.T) {
 	seed := time.Now().UnixNano()
 	popr := math_rand.New(math_rand.NewSource(seed))
-	p := NewPopulatedPutRoleRequest(popr, false)
+	p := NewPopulatedGetRoleStackRequest(popr, false)
 	size := p.Size()
 	data := make([]byte, size)
 	for i := range data {
@@ -178,7 +179,7 @@ func TestPutRoleRequestMarshalTo(t *testing.T) {
 	if err != nil {
 		t.Fatalf("seed = %d, err = %v", seed, err)
 	}
-	msg := &PutRoleRequest{}
+	msg := &GetRoleStackRequest{}
 	if err := github_com_gogo_protobuf_proto.Unmarshal(data, msg); err != nil {
 		t.Fatalf("seed = %d, err = %v", seed, err)
 	}
@@ -190,15 +191,15 @@ func TestPutRoleRequestMarshalTo(t *testing.T) {
 	}
 }
 
-func TestPutRoleResponseProto(t *testing.T) {
+func TestGetRoleStackResponseProto(t *testing.T) {
 	seed := time.Now().UnixNano()
 	popr := math_rand.New(math_rand.NewSource(seed))
-	p := NewPopulatedPutRoleResponse(popr, false)
+	p := NewPopulatedGetRoleStackResponse(popr, false)
 	data, err := github_com_gogo_protobuf_proto.Marshal(p)
 	if err != nil {
 		t.Fatalf("seed = %d, err = %v", seed, err)
 	}
-	msg := &PutRoleResponse{}
+	msg := &GetRoleStackResponse{}
 	if err := github_com_gogo_protobuf_proto.Unmarshal(data, msg); err != nil {
 		t.Fatalf("seed = %d, err = %v", seed, err)
 	}
@@ -221,10 +222,10 @@ func TestPutRoleResponseProto(t *testing.T) {
 	}
 }
 
-func TestPutRoleResponseMarshalTo(t *testing.T) {
+func TestGetRoleStackResponseMarshalTo(t *testing.T) {
 	seed := time.Now().UnixNano()
 	popr := math_rand.New(math_rand.NewSource(seed))
-	p := NewPopulatedPutRoleResponse(popr, false)
+	p := NewPopulatedGetRoleStackResponse(popr, false)
 	size := p.Size()
 	data := make([]byte, size)
 	for i := range data {
@@ -234,7 +235,7 @@ func TestPutRoleResponseMarshalTo(t *testing.T) {
 	if err != nil {
 		t.Fatalf("seed = %d, err = %v", seed, err)
 	}
-	msg := &PutRoleResponse{}
+	msg := &GetRoleStackResponse{}
 	if err := github_com_gogo_protobuf_proto.Unmarshal(data, msg); err != nil {
 		t.Fatalf("seed = %d, err = %v", seed, err)
 	}
@@ -394,16 +395,16 @@ func TestEnhancedCombatModeResponseJSON(t *testing.T) {
 		t.Fatalf("seed = %d, %#v !Json Equal %#v", seed, msg, p)
 	}
 }
-func TestPutRoleRequestJSON(t *testing.T) {
+func TestGetRoleStackRequestJSON(t *testing.T) {
 	seed := time.Now().UnixNano()
 	popr := math_rand.New(math_rand.NewSource(seed))
-	p := NewPopulatedPutRoleRequest(popr, true)
+	p := NewPopulatedGetRoleStackRequest(popr, true)
 	marshaler := github_com_gogo_protobuf_jsonpb.Marshaler{}
 	jsondata, err := marshaler.MarshalToString(p)
 	if err != nil {
 		t.Fatalf("seed = %d, err = %v", seed, err)
 	}
-	msg := &PutRoleRequest{}
+	msg := &GetRoleStackRequest{}
 	err = github_com_gogo_protobuf_jsonpb.UnmarshalString(jsondata, msg)
 	if err != nil {
 		t.Fatalf("seed = %d, err = %v", seed, err)
@@ -412,16 +413,16 @@ func TestPutRoleRequestJSON(t *testing.T) {
 		t.Fatalf("seed = %d, %#v !Json Equal %#v", seed, msg, p)
 	}
 }
-func TestPutRoleResponseJSON(t *testing.T) {
+func TestGetRoleStackResponseJSON(t *testing.T) {
 	seed := time.Now().UnixNano()
 	popr := math_rand.New(math_rand.NewSource(seed))
-	p := NewPopulatedPutRoleResponse(popr, true)
+	p := NewPopulatedGetRoleStackResponse(popr, true)
 	marshaler := github_com_gogo_protobuf_jsonpb.Marshaler{}
 	jsondata, err := marshaler.MarshalToString(p)
 	if err != nil {
 		t.Fatalf("seed = %d, err = %v", seed, err)
 	}
-	msg := &PutRoleResponse{}
+	msg := &GetRoleStackResponse{}
 	err = github_com_gogo_protobuf_jsonpb.UnmarshalString(jsondata, msg)
 	if err != nil {
 		t.Fatalf("seed = %d, err = %v", seed, err)
@@ -522,12 +523,12 @@ func TestEnhancedCombatModeResponseProtoCompactText(t *testing.T) {
 	}
 }
 
-func TestPutRoleRequestProtoText(t *testing.T) {
+func TestGetRoleStackRequestProtoText(t *testing.T) {
 	seed := time.Now().UnixNano()
 	popr := math_rand.New(math_rand.NewSource(seed))
-	p := NewPopulatedPutRoleRequest(popr, true)
+	p := NewPopulatedGetRoleStackRequest(popr, true)
 	data := github_com_gogo_protobuf_proto.MarshalTextString(p)
-	msg := &PutRoleRequest{}
+	msg := &GetRoleStackRequest{}
 	if err := github_com_gogo_protobuf_proto.UnmarshalText(data, msg); err != nil {
 		t.Fatalf("seed = %d, err = %v", seed, err)
 	}
@@ -536,12 +537,12 @@ func TestPutRoleRequestProtoText(t *testing.T) {
 	}
 }
 
-func TestPutRoleRequestProtoCompactText(t *testing.T) {
+func TestGetRoleStackRequestProtoCompactText(t *testing.T) {
 	seed := time.Now().UnixNano()
 	popr := math_rand.New(math_rand.NewSource(seed))
-	p := NewPopulatedPutRoleRequest(popr, true)
+	p := NewPopulatedGetRoleStackRequest(popr, true)
 	data := github_com_gogo_protobuf_proto.CompactTextString(p)
-	msg := &PutRoleRequest{}
+	msg := &GetRoleStackRequest{}
 	if err := github_com_gogo_protobuf_proto.UnmarshalText(data, msg); err != nil {
 		t.Fatalf("seed = %d, err = %v", seed, err)
 	}
@@ -550,12 +551,12 @@ func TestPutRoleRequestProtoCompactText(t *testing.T) {
 	}
 }
 
-func TestPutRoleResponseProtoText(t *testing.T) {
+func TestGetRoleStackResponseProtoText(t *testing.T) {
 	seed := time.Now().UnixNano()
 	popr := math_rand.New(math_rand.NewSource(seed))
-	p := NewPopulatedPutRoleResponse(popr, true)
+	p := NewPopulatedGetRoleStackResponse(popr, true)
 	data := github_com_gogo_protobuf_proto.MarshalTextString(p)
-	msg := &PutRoleResponse{}
+	msg := &GetRoleStackResponse{}
 	if err := github_com_gogo_protobuf_proto.UnmarshalText(data, msg); err != nil {
 		t.Fatalf("seed = %d, err = %v", seed, err)
 	}
@@ -564,12 +565,12 @@ func TestPutRoleResponseProtoText(t *testing.T) {
 	}
 }
 
-func TestPutRoleResponseProtoCompactText(t *testing.T) {
+func TestGetRoleStackResponseProtoCompactText(t *testing.T) {
 	seed := time.Now().UnixNano()
 	popr := math_rand.New(math_rand.NewSource(seed))
-	p := NewPopulatedPutRoleResponse(popr, true)
+	p := NewPopulatedGetRoleStackResponse(popr, true)
 	data := github_com_gogo_protobuf_proto.CompactTextString(p)
-	msg := &PutRoleResponse{}
+	msg := &GetRoleStackResponse{}
 	if err := github_com_gogo_protobuf_proto.UnmarshalText(data, msg); err != nil {
 		t.Fatalf("seed = %d, err = %v", seed, err)
 	}
@@ -678,10 +679,10 @@ func TestEnhancedCombatModeResponseSize(t *testing.T) {
 	}
 }
 
-func TestPutRoleRequestSize(t *testing.T) {
+func TestGetRoleStackRequestSize(t *testing.T) {
 	seed := time.Now().UnixNano()
 	popr := math_rand.New(math_rand.NewSource(seed))
-	p := NewPopulatedPutRoleRequest(popr, true)
+	p := NewPopulatedGetRoleStackRequest(popr, true)
 	size2 := github_com_gogo_protobuf_proto.Size(p)
 	data, err := github_com_gogo_protobuf_proto.Marshal(p)
 	if err != nil {
@@ -700,10 +701,10 @@ func TestPutRoleRequestSize(t *testing.T) {
 	}
 }
 
-func TestPutRoleResponseSize(t *testing.T) {
+func TestGetRoleStackResponseSize(t *testing.T) {
 	seed := time.Now().UnixNano()
 	popr := math_rand.New(math_rand.NewSource(seed))
-	p := NewPopulatedPutRoleResponse(popr, true)
+	p := NewPopulatedGetRoleStackResponse(popr, true)
 	size2 := github_com_gogo_protobuf_proto.Size(p)
 	data, err := github_com_gogo_protobuf_proto.Marshal(p)
 	if err != nil {
@@ -784,20 +785,20 @@ func TestEnhancedCombatModeResponseGraphQL(t *testing.T) {
 		t.Fatalf("String want %v got %v", objdesc, pdesc)
 	}
 }
-func TestPutRoleRequestGraphQL(t *testing.T) {
+func TestGetRoleStackRequestGraphQL(t *testing.T) {
 	popr := math_rand.New(math_rand.NewSource(time.Now().UnixNano()))
-	_ = NewPopulatedPutRoleRequest(popr, false)
+	_ = NewPopulatedGetRoleStackRequest(popr, false)
 	objdesc := ""
-	pdesc := GraphQLPutRoleRequestType.PrivateDescription
+	pdesc := GraphQLGetRoleStackRequestType.PrivateDescription
 	if pdesc != objdesc {
 		t.Fatalf("String want %v got %v", objdesc, pdesc)
 	}
 }
-func TestPutRoleResponseGraphQL(t *testing.T) {
+func TestGetRoleStackResponseGraphQL(t *testing.T) {
 	popr := math_rand.New(math_rand.NewSource(time.Now().UnixNano()))
-	_ = NewPopulatedPutRoleResponse(popr, false)
+	_ = NewPopulatedGetRoleStackResponse(popr, false)
 	objdesc := ""
-	pdesc := GraphQLPutRoleResponseType.PrivateDescription
+	pdesc := GraphQLGetRoleStackResponseType.PrivateDescription
 	if pdesc != objdesc {
 		t.Fatalf("String want %v got %v", objdesc, pdesc)
 	}
