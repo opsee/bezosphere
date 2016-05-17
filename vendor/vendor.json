@@ -531,11 +531,10 @@
 			"revisionTime": "2016-02-11T19:18:39-08:00"
 		},
 		{
-			"checksumSHA1": "ixS1VTkkP+j+z0n7A9IsXMv7nJE=",
-			"origin": "github.com/opsee/bezosphere/vendor/github.com/opsee/basic/schema",
+			"checksumSHA1": "6on/plhtsYeYv/wwH7SvKbp7JUk=",
 			"path": "github.com/opsee/basic/schema",
-			"revision": "91488f3f8949d7618563d44b11b7ac31c3d1e73e",
-			"revisionTime": "2016-05-05T09:24:11-07:00"
+			"revision": "db36922641852164dc4baba41633d145ffd374bd",
+			"revisionTime": "2016-05-17T17:00:52Z"
 		},
 		{
 			"checksumSHA1": "r7Nu6cs65RmzNq+lOLsW7lR+T7U=",
@@ -573,6 +572,12 @@
 			"revisionTime": "2016-05-05T09:24:11-07:00"
 		},
 		{
+			"checksumSHA1": "7WryiL6lgDXesLJbzJGTgLENy1Q=",
+			"path": "github.com/opsee/basic/schema/aws/ecs",
+			"revision": "db36922641852164dc4baba41633d145ffd374bd",
+			"revisionTime": "2016-05-17T17:00:52Z"
+		},
+		{
 			"checksumSHA1": "P1kNoPDJDpQm4vTs121rs/MQ2is=",
 			"origin": "github.com/opsee/bezosphere/vendor/github.com/opsee/basic/schema/aws/elb",
 			"path": "github.com/opsee/basic/schema/aws/elb",
@@ -587,11 +592,10 @@
 			"revisionTime": "2016-05-05T09:24:11-07:00"
 		},
 		{
-			"checksumSHA1": "26WGb40WMaBZNff6we13fY8ntP0=",
-			"origin": "github.com/opsee/bezosphere/vendor/github.com/opsee/basic/service",
+			"checksumSHA1": "8We8LTFXnP88YyNK3gr93fS1SGE=",
 			"path": "github.com/opsee/basic/service",
-			"revision": "91488f3f8949d7618563d44b11b7ac31c3d1e73e",
-			"revisionTime": "2016-05-05T09:24:11-07:00"
+			"revision": "db36922641852164dc4baba41633d145ffd374bd",
+			"revisionTime": "2016-05-17T17:00:52Z"
 		},
 		{
 			"checksumSHA1": "AdAlxYpERfxuIqtd5eQ0LumzbrE=",
@@ -615,10 +619,10 @@
 			"revisionTime": "2016-04-14T10:55:35-07:00"
 		},
 		{
-			"checksumSHA1": "9yz+azoyYBHLE6+7PvcQ3ms0foc=",
+			"checksumSHA1": "B7M9yLVvmDk6+1IA6Hx4Dk9PuHo=",
 			"path": "github.com/opsee/spanx/spanxcreds",
-			"revision": "967813f36eff7d60ee53fc063f666a21eb7953a3",
-			"revisionTime": "2016-05-06T14:03:50-07:00"
+			"revision": "f2ffb610c15e2483879c890582598a1a0ecd5258",
+			"revisionTime": "2016-05-13T20:37:31Z"
 		},
 		{
 			"checksumSHA1": "RZOdTSZN/PgcTqko5LzIAzw+UT4=",
