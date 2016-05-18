@@ -300,27 +300,27 @@ func inputOutput(ipt interface{}) (interface{}, interface{}, error) {
 
 	switch t := ipt.(type) {
 	case *opsee.BezosRequest_Ecs_ListTasksInput:
-		input = t.Ecs_ListTasksOutput
+		input = t.Ecs_ListTasksInput
 		output = &opsee_aws_ecs.ListTasksOutput{}
 
 	case *opsee.BezosRequest_Ecs_DescribeTasksInput:
-		input = t.Ecs_DescribeTasksOutput
+		input = t.Ecs_DescribeTasksInput
 		output = &opsee_aws_ecs.DescribeTasksOutput{}
 
 	case *opsee.BezosRequest_Ecs_DescribeContainerInstancesInput:
-		input = t.Ecs_DescribeContainerInstancesOutput
+		input = t.Ecs_DescribeContainerInstancesInput
 		output = &opsee_aws_ecs.DescribeContainerInstancesOutput{}
 
 	case *opsee.BezosRequest_Ecs_ListClustersInput:
-		input = t.Ecs_ListClustersOutput
+		input = t.Ecs_ListClustersInput
 		output = &opsee_aws_ecs.ListClustersOutput{}
 
 	case *opsee.BezosRequest_Ecs_ListServicesInput:
-		input = t.Ecs_ListServicesOutput
+		input = t.Ecs_ListServicesInput
 		output = &opsee_aws_ecs.ListServicesOutput{}
 
 	case *opsee.BezosRequest_Ecs_DescribeServicesInput:
-		input = t.Ecs_DescribeServicesOutput
+		input = t.Ecs_DescribeServicesInput
 		output = &opsee_aws_ecs.DescribeServicesOutput{}
 
 	case *opsee.BezosRequest_Cloudwatch_ListMetricsInput:
@@ -377,22 +377,22 @@ func buildResponse(opt interface{}) (*opsee.BezosResponse, error) {
 
 	switch t := opt.(type) {
 	case *opsee_aws_ecs.ListTasksOutput:
-		response = &opsee.BezosRequest{Output: &opsee.BezosResponse_Ecs_ListTasksOutput{t}}
+		response = &opsee.BezosResponse{Output: &opsee.BezosResponse_Ecs_ListTasksOutput{t}}
 
 	case *opsee_aws_ecs.DescribeTasksOutput:
-		response = &opsee.BezosRequest{Output: &opsee.BezosResponse_Ecs_DescribeTasksOutput{t}}
+		response = &opsee.BezosResponse{Output: &opsee.BezosResponse_Ecs_DescribeTasksOutput{t}}
 
 	case *opsee_aws_ecs.DescribeContainerInstancesOutput:
-		response = &opsee.BezosRequest{Output: &opsee.BezosResponse_Ecs_DescribeContainerInstancesOutput{t}}
+		response = &opsee.BezosResponse{Output: &opsee.BezosResponse_Ecs_DescribeContainerInstancesOutput{t}}
 
 	case *opsee_aws_ecs.ListClustersOutput:
-		response = &opsee.BezosRequest{Output: &opsee.BezosResponse_Ecs_ListClustersOutput{t}}
+		response = &opsee.BezosResponse{Output: &opsee.BezosResponse_Ecs_ListClustersOutput{t}}
 
 	case *opsee_aws_ecs.ListServicesOutput:
-		response = &opsee.BezosRequest{Output: &opsee.BezosResponse_Ecs_ListServicesOutput{t}}
+		response = &opsee.BezosResponse{Output: &opsee.BezosResponse_Ecs_ListServicesOutput{t}}
 
 	case *opsee_aws_ecs.DescribeServicesOutput:
-		response = &opsee.BezosRequest{Output: &opsee.BezosResponse_Ecs_DescribeServicesOutput{t}}
+		response = &opsee.BezosResponse{Output: &opsee.BezosResponse_Ecs_DescribeServicesOutput{t}}
 
 	case *opsee_aws_cloudwatch.ListMetricsOutput:
 		response = &opsee.BezosResponse{Output: &opsee.BezosResponse_Cloudwatch_ListMetricsOutput{t}}
