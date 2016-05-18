@@ -9,12 +9,14 @@ import (
 	"github.com/aws/aws-sdk-go/service/autoscaling"
 	"github.com/aws/aws-sdk-go/service/cloudwatch"
 	"github.com/aws/aws-sdk-go/service/ec2"
+	"github.com/aws/aws-sdk-go/service/ecs"
 	"github.com/aws/aws-sdk-go/service/elb"
 	"github.com/aws/aws-sdk-go/service/rds"
 	opsee_aws "github.com/opsee/basic/schema/aws"
 	opsee_aws_autoscaling "github.com/opsee/basic/schema/aws/autoscaling"
 	opsee_aws_cloudwatch "github.com/opsee/basic/schema/aws/cloudwatch"
 	opsee_aws_ec2 "github.com/opsee/basic/schema/aws/ec2"
+	opsee_aws_ecs "github.com/opsee/basic/schema/aws/ecs"
 	opsee_aws_elb "github.com/opsee/basic/schema/aws/elb"
 	opsee_aws_rds "github.com/opsee/basic/schema/aws/rds"
 	opsee "github.com/opsee/basic/service"
@@ -247,6 +249,36 @@ func dispatchRequest(ctx context.Context, logger *log.Entry, session *session.Se
 		opsee_aws.CopyInto(ipt, input)
 		awsOutput, err = rds.New(session).DescribeDBInstances(ipt)
 
+	case *opsee_aws_ecs.ListTasksInput:
+		ipt := &ecs.ListTasksInput{}
+		opsee_aws.CopyInto(ipt, input)
+		awsOutput, err = ecs.New(session).ListTasks(ipt)
+
+	case *opsee_aws_ecs.DescribeTasksInput:
+		ipt := &ecs.DescribeTasksInput{}
+		opsee_aws.CopyInto(ipt, input)
+		awsOutput, err = ecs.New(session).DescribeTasks(ipt)
+
+	case *opsee_aws_ecs.DescribeContainerInstancesInput:
+		ipt := &ecs.DescribeContainerInstancesInput{}
+		opsee_aws.CopyInto(ipt, input)
+		awsOutput, err = ecs.New(session).DescribeContainerInstances(ipt)
+
+	case *opsee_aws_ecs.ListClustersInput:
+		ipt := &ecs.ListClustersInput{}
+		opsee_aws.CopyInto(ipt, input)
+		awsOutput, err = ecs.New(session).ListClusters(ipt)
+
+	case *opsee_aws_ecs.ListServicesInput:
+		ipt := &ecs.ListServicesInput{}
+		opsee_aws.CopyInto(ipt, input)
+		awsOutput, err = ecs.New(session).ListServices(ipt)
+
+	case *opsee_aws_ecs.DescribeServicesInput:
+		ipt := &ecs.DescribeServicesInput{}
+		opsee_aws.CopyInto(ipt, input)
+		awsOutput, err = ecs.New(session).DescribeServices(ipt)
+
 	default:
 		return fmt.Errorf("input type not found: %#v", input)
 	}
@@ -267,6 +299,30 @@ func inputOutput(ipt interface{}) (interface{}, interface{}, error) {
 	)
 
 	switch t := ipt.(type) {
+	case *opsee.BezosRequest_Ecs_ListTasksInput:
+		input = t.Ecs_ListTasksOutput
+		output = &opsee_aws_ecs.ListTasksOutput{}
+
+	case *opsee.BezosRequest_Ecs_DescribeTasksInput:
+		input = t.Ecs_DescribeTasksOutput
+		output = &opsee_aws_ecs.DescribeTasksOutput{}
+
+	case *opsee.BezosRequest_Ecs_DescribeContainerInstancesInput:
+		input = t.Ecs_DescribeContainerInstancesOutput
+		output = &opsee_aws_ecs.DescribeContainerInstancesOutput{}
+
+	case *opsee.BezosRequest_Ecs_ListClustersInput:
+		input = t.Ecs_ListClustersOutput
+		output = &opsee_aws_ecs.ListClustersOutput{}
+
+	case *opsee.BezosRequest_Ecs_ListServicesInput:
+		input = t.Ecs_ListServicesOutput
+		output = &opsee_aws_ecs.ListServicesOutput{}
+
+	case *opsee.BezosRequest_Ecs_DescribeServicesInput:
+		input = t.Ecs_DescribeServicesOutput
+		output = &opsee_aws_ecs.DescribeServicesOutput{}
+
 	case *opsee.BezosRequest_Cloudwatch_ListMetricsInput:
 		input = t.Cloudwatch_ListMetricsInput
 		output = &opsee_aws_cloudwatch.ListMetricsOutput{}
@@ -320,6 +376,24 @@ func buildResponse(opt interface{}) (*opsee.BezosResponse, error) {
 	)
 
 	switch t := opt.(type) {
+	case *opsee_aws_ecs.ListTasksOutput:
+		response = &opsee.BezosRequest{Output: &opsee.BezosResponse_Ecs_ListTasksOutput{t}}
+
+	case *opsee_aws_ecs.DescribeTasksOutput:
+		response = &opsee.BezosRequest{Output: &opsee.BezosResponse_Ecs_DescribeTasksOutput{t}}
+
+	case *opsee_aws_ecs.DescribeContainerInstancesOutput:
+		response = &opsee.BezosRequest{Output: &opsee.BezosResponse_Ecs_DescribeContainerInstancesOutput{t}}
+
+	case *opsee_aws_ecs.ListClustersOutput:
+		response = &opsee.BezosRequest{Output: &opsee.BezosResponse_Ecs_ListClustersOutput{t}}
+
+	case *opsee_aws_ecs.ListServicesOutput:
+		response = &opsee.BezosRequest{Output: &opsee.BezosResponse_Ecs_ListServicesOutput{t}}
+
+	case *opsee_aws_ecs.DescribeServicesOutput:
+		response = &opsee.BezosRequest{Output: &opsee.BezosResponse_Ecs_DescribeServicesOutput{t}}
+
 	case *opsee_aws_cloudwatch.ListMetricsOutput:
 		response = &opsee.BezosResponse{Output: &opsee.BezosResponse_Cloudwatch_ListMetricsOutput{t}}
 
