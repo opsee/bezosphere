@@ -264,6 +264,11 @@ func dispatchRequest(ctx context.Context, logger *log.Entry, session *session.Se
 		opsee_aws.CopyInto(ipt, input)
 		awsOutput, err = ecs.New(session).DescribeContainerInstances(ipt)
 
+	case *opsee_aws_ecs.ListContainerInstancesInput:
+		ipt := &ecs.ListContainerInstancesInput{}
+		opsee_aws.CopyInto(ipt, input)
+		awsOutput, err = ecs.New(session).ListContainerInstances(ipt)
+
 	case *opsee_aws_ecs.ListClustersInput:
 		ipt := &ecs.ListClustersInput{}
 		opsee_aws.CopyInto(ipt, input)
@@ -310,6 +315,10 @@ func inputOutput(ipt interface{}) (interface{}, interface{}, error) {
 	case *opsee.BezosRequest_Ecs_DescribeContainerInstancesInput:
 		input = t.Ecs_DescribeContainerInstancesInput
 		output = &opsee_aws_ecs.DescribeContainerInstancesOutput{}
+
+	case *opsee.BezosRequest_Ecs_ListContainerInstancesInput:
+		input = t.Ecs_ListContainerInstancesInput
+		output = &opsee_aws_ecs.ListContainerInstancesOutput{}
 
 	case *opsee.BezosRequest_Ecs_ListClustersInput:
 		input = t.Ecs_ListClustersInput
@@ -384,6 +393,9 @@ func buildResponse(opt interface{}) (*opsee.BezosResponse, error) {
 
 	case *opsee_aws_ecs.DescribeContainerInstancesOutput:
 		response = &opsee.BezosResponse{Output: &opsee.BezosResponse_Ecs_DescribeContainerInstancesOutput{t}}
+
+	case *opsee_aws_ecs.ListContainerInstancesOutput:
+		response = &opsee.BezosResponse{Output: &opsee.BezosResponse_Ecs_ListContainerInstancesOutput{t}}
 
 	case *opsee_aws_ecs.ListClustersOutput:
 		response = &opsee.BezosResponse{Output: &opsee.BezosResponse_Ecs_ListClustersOutput{t}}
