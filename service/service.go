@@ -284,6 +284,16 @@ func dispatchRequest(ctx context.Context, logger *log.Entry, session *session.Se
 		opsee_aws.CopyInto(ipt, input)
 		awsOutput, err = ecs.New(session).DescribeServices(ipt)
 
+	case *opsee_aws_cloudwatch.DescribeAlarmsInput:
+		ipt := &cloudwatch.DescribeAlarmsInput{}
+		opsee_aws.CopyInto(ipt, input)
+		awsOutput, err = cloudwatch.New(session).DescribeAlarms(ipt)
+
+	case *opsee_aws_cloudwatch.DescribeAlarmsForMetricInput:
+		ipt := &cloudwatch.DescribeAlarmsForMetricInput{}
+		opsee_aws.CopyInto(ipt, input)
+		awsOutput, err = cloudwatch.New(session).DescribeAlarmsForMetric(ipt)
+
 	default:
 		return fmt.Errorf("input type not found: %#v", input)
 	}
@@ -372,6 +382,14 @@ func inputOutput(ipt interface{}) (interface{}, interface{}, error) {
 		input = t.Rds_DescribeDBInstancesInput
 		output = &opsee_aws_rds.DescribeDBInstancesOutput{}
 
+	case *opsee.BezosRequest_Cloudwatch_DescribeAlarmsInput:
+		input = t.Cloudwatch_DescribeAlarmsInput
+		output = &opsee_aws_cloudwatch.DescribeAlarmsOutput{}
+
+	case *opsee.BezosRequest_Cloudwatch_DescribeAlarmsForMetricInput:
+		input = t.Cloudwatch_DescribeAlarmsForMetricInput
+		output = &opsee_aws_cloudwatch.DescribeAlarmsForMetricOutput{}
+
 	default:
 		return nil, nil, fmt.Errorf("input type not found: %#v", ipt)
 	}
@@ -435,6 +453,12 @@ func buildResponse(opt interface{}) (*opsee.BezosResponse, error) {
 
 	case *opsee_aws_rds.DescribeDBInstancesOutput:
 		response = &opsee.BezosResponse{Output: &opsee.BezosResponse_Rds_DescribeDBInstancesOutput{t}}
+
+	case *opsee_aws_cloudwatch.DescribeAlarmsOutput:
+		response = &opsee.BezosResponse{Output: &opsee.BezosResponse_Cloudwatch_DescribeAlarmsOutput{t}}
+
+	case *opsee_aws_cloudwatch.DescribeAlarmsForMetricOutput:
+		response = &opsee.BezosResponse{Output: &opsee.BezosResponse_Cloudwatch_DescribeAlarmsForMetricOutput{t}}
 
 	default:
 		return nil, fmt.Errorf("output type not found: %#v", t)
