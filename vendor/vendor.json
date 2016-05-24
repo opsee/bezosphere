@@ -460,22 +460,22 @@
 			"checksumSHA1": "AdAlxYpERfxuIqtd5eQ0LumzbrE=",
 			"origin": "github.com/opsee/bezosphere/vendor/github.com/opsee/protobuf/opseeproto",
 			"path": "github.com/opsee/protobuf/opseeproto",
-			"revision": "fcd127be28d4536d18a88580598eb30664b5d68f",
-			"revisionTime": "2016-04-14T10:55:35-07:00"
+			"revision": "3889688ce052b1de4c718c3a6bbd423ced68cc57",
+			"revisionTime": "2016-05-24T11:18:30-07:00"
 		},
 		{
 			"checksumSHA1": "X0ft2388bKJX3DMfMgVRK3WdNUM=",
 			"origin": "github.com/opsee/bezosphere/vendor/github.com/opsee/protobuf/opseeproto/types",
 			"path": "github.com/opsee/protobuf/opseeproto/types",
-			"revision": "fcd127be28d4536d18a88580598eb30664b5d68f",
-			"revisionTime": "2016-04-14T10:55:35-07:00"
+			"revision": "3889688ce052b1de4c718c3a6bbd423ced68cc57",
+			"revisionTime": "2016-05-24T11:18:30-07:00"
 		},
 		{
 			"checksumSHA1": "Jvk8GORIFQWlvhuaf42C+XmjiOM=",
 			"origin": "github.com/opsee/bezosphere/vendor/github.com/opsee/protobuf/plugin/graphql/scalars",
 			"path": "github.com/opsee/protobuf/plugin/graphql/scalars",
-			"revision": "fcd127be28d4536d18a88580598eb30664b5d68f",
-			"revisionTime": "2016-04-14T10:55:35-07:00"
+			"revision": "3889688ce052b1de4c718c3a6bbd423ced68cc57",
+			"revisionTime": "2016-05-24T11:18:30-07:00"
 		},
 		{
 			"checksumSHA1": "8eGyvOJ1nP/OtF4K7N52Xf/+qZQ=",
