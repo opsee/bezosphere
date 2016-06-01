@@ -2,8 +2,12 @@ package service
 
 import (
 	"crypto/tls"
+	"encoding/json"
 	"errors"
 	"fmt"
+	"net"
+	"reflect"
+
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/autoscaling"
@@ -26,8 +30,6 @@ import (
 	"golang.org/x/net/context"
 	"google.golang.org/grpc"
 	grpcauth "google.golang.org/grpc/credentials"
-	"net"
-	"reflect"
 )
 
 var (
@@ -120,6 +122,12 @@ func (s *service) Get(ctx context.Context, req *opsee.BezosRequest) (*opsee.Bezo
 	}
 
 	logger.Info("valid grpc request")
+	bites, err := json.Marshal(req.Input)
+	if err != nil {
+		logger.WithError(err).Error("can't marshal request input")
+		return nil, err
+	}
+	logger.Info("received request: ", string(bites))
 
 	input, output, err := inputOutput(req.Input)
 	if err != nil {
