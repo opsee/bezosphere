@@ -3,7 +3,7 @@ package main
 import (
 	"github.com/opsee/bezosphere/service"
 	"github.com/opsee/bezosphere/store"
-	log "github.com/sirupsen/logrus"
+	log "github.com/opsee/logrus"
 	"github.com/spf13/viper"
 )
 
