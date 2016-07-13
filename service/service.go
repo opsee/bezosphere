@@ -121,13 +121,13 @@ func (s *service) Get(ctx context.Context, req *opsee.BezosRequest) (*opsee.Bezo
 		return nil, ErrNoVpcId
 	}
 
-	logger.Info("valid grpc request")
+	logger.Debug("valid grpc request")
 	bites, err := json.Marshal(req.Input)
 	if err != nil {
 		logger.WithError(err).Error("can't marshal request input")
 		return nil, err
 	}
-	logger.Info("received request: ", string(bites))
+	logger.Debug("received request: ", string(bites))
 
 	input, output, err := inputOutput(req.Input)
 	if err != nil {
@@ -151,7 +151,7 @@ func (s *service) Get(ctx context.Context, req *opsee.BezosRequest) (*opsee.Bezo
 	if err != nil {
 		logger.WithError(err).Error("cache miss")
 	} else {
-		logger.Info("cache hit")
+		logger.Debug("cache hit")
 
 		response, err = buildResponse(output)
 		if err != nil {
