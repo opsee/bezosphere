@@ -1,7 +1,8 @@
 syntax = "proto3";
 
 import "github.com/opsee/protobuf/opseeproto/opsee.proto";
-import "github.com/opsee/protobuf/opseeproto/types/permissions.proto";
+import "github.com/opsee/protobuf/opseeproto/types/timestamp.proto";
+import "github.com/opsee/basic/schema/aws/credentials/types.proto";
 import "github.com/opsee/basic/schema/user.proto";
 
 package opsee;
@@ -9,6 +10,15 @@ package opsee;
 option go_package = "service";
 option (opseeproto.graphql) = true;
 
+message GetCheckCountRequest {
+  User user = 1;
+	bool prorated = 2;
+}
+
+message GetCheckCountResponse {
+	float count = 1;
+	bool prorated = 2;
+}
 
 // Customers
 message ListCustomersResponse {
@@ -47,16 +57,17 @@ message ListUsersResponse {
 message InviteUserRequest {
 	User requestor = 1; 
 	string email = 2;
-	opsee.types.Permission perms = 3;
+	opsee.UserFlags perms = 3;
+	string name = 4;
 }
 
 message InviteUserResponse {
-    Invite invite = 1; 
+	Invite invite = 1; 
 }
 
 message DeleteUserRequest {
 	User requestor = 1; 
-    User user = 2;
+	User user = 2;
 }
 
 message DeleteUserResponse {
@@ -65,22 +76,17 @@ message DeleteUserResponse {
 
 message UpdateUserRequest {
 	User requestor = 1; 
-    User user = 2; 
+	User user = 2; 
 	string email = 3;
 	string name = 4;
 	string password = 5;
-    string status = 6;
-}
-
-message UpdateUserPermsRequest {
-	User requestor = 1; 
-    User user = 2; 
-	opsee.types.Permission perms = 3;
+	string status = 6;
+	opsee.UserFlags perms = 7;
 }
 
 message UserTokenResponse {
 	User user = 1;
-    string token = 2;
+	string token = 2;
 }
 
 // Teams
@@ -95,26 +101,27 @@ message GetTeamResponse {
 
 message UpdateTeamRequest {
 	User requestor = 1; 
-    Team team = 2;
+	Team team = 2;
+	string stripe_token = 3;
 }
 
 message UpdateTeamResponse {
-    Team team = 2;
+	Team team = 2;
 }
 
 message DeleteTeamRequest {
 	User requestor = 1; 
-    Team team = 2;
+	Team team = 2;
 }
 
 message DeleteTeamResponse {
-    Team team = 2;
+	Team team = 2;
 }
 
-service Vape {
+service Cats {
+	rpc GetCheckCount(GetCheckCountRequest) returns (GetCheckCountResponse) {}
 	rpc GetUser(GetUserRequest) returns (GetUserResponse) {}
 	rpc UpdateUser(UpdateUserRequest) returns (UserTokenResponse) {}
-	rpc UpdateUserPerms(UpdateUserPermsRequest) returns (UserTokenResponse) {}
 	rpc ListUsers(ListUsersRequest) returns (ListUsersResponse) {}
 	rpc InviteUser(InviteUserRequest) returns (InviteUserResponse) {}
 	rpc DeleteUser(DeleteUserRequest) returns (DeleteUserResponse) {}

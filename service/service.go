@@ -292,6 +292,11 @@ func dispatchRequest(ctx context.Context, logger *log.Entry, session *session.Se
 		opsee_aws.CopyInto(ipt, input)
 		awsOutput, err = ecs.New(session).DescribeServices(ipt)
 
+	case *opsee_aws_ecs.DescribeTaskDefinitionInput:
+		ipt := &ecs.DescribeTaskDefinitionInput{}
+		opsee_aws.CopyInto(ipt, input)
+		awsOutput, err = ecs.New(session).DescribeTaskDefinition(ipt)
+
 	case *opsee_aws_cloudwatch.DescribeAlarmsInput:
 		ipt := &cloudwatch.DescribeAlarmsInput{}
 		opsee_aws.CopyInto(ipt, input)
@@ -349,6 +354,10 @@ func inputOutput(ipt interface{}) (interface{}, interface{}, error) {
 	case *opsee.BezosRequest_Ecs_DescribeServicesInput:
 		input = t.Ecs_DescribeServicesInput
 		output = &opsee_aws_ecs.DescribeServicesOutput{}
+
+	case *opsee.BezosRequest_Ecs_DescribeTaskDefinitionInput:
+		input = t.Ecs_DescribeTaskDefinitionInput
+		output = &opsee_aws_ecs.DescribeTaskDefinitionOutput{}
 
 	case *opsee.BezosRequest_Cloudwatch_ListMetricsInput:
 		input = t.Cloudwatch_ListMetricsInput
@@ -431,6 +440,9 @@ func buildResponse(opt interface{}) (*opsee.BezosResponse, error) {
 
 	case *opsee_aws_ecs.DescribeServicesOutput:
 		response = &opsee.BezosResponse{Output: &opsee.BezosResponse_Ecs_DescribeServicesOutput{t}}
+
+	case *opsee_aws_ecs.DescribeTaskDefinitionOutput:
+		response = &opsee.BezosResponse{Output: &opsee.BezosResponse_Ecs_DescribeTaskDefinitionOutput{t}}
 
 	case *opsee_aws_cloudwatch.ListMetricsOutput:
 		response = &opsee.BezosResponse{Output: &opsee.BezosResponse_Cloudwatch_ListMetricsOutput{t}}
