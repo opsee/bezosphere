@@ -89,12 +89,12 @@ func (s *service) Start(listenAddr, cert, certkey string) error {
 }
 
 func (s *service) Get(ctx context.Context, req *opsee.BezosRequest) (*opsee.BezosResponse, error) {
-	logger := log.WithField("input", reflect.TypeOf(req.Input).Elem().Name())
-
 	if req.Input == nil {
-		logger.WithError(ErrNoInput).Errorf("invalid input %#v", req.Input)
+		log.WithError(ErrNoInput).Errorf("invalid input %#v", req.Input)
 		return nil, ErrNoInput
 	}
+
+	logger := log.WithField("input", reflect.TypeOf(req.Input).Elem().Name())
 
 	if req.User == nil {
 		logger.WithError(ErrNoUser).Error(ErrNoUser.Error())
